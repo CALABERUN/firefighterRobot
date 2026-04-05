@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <h1>Camera view</h1>
+    <img src="" id="Camera">
+    <div class="movement">
+        <button id="fow" onclick="AlertaW()">
+            W
+        </button>
+        <button id="bac"onclick="AlertaS()"> 
+        S
+        </button>
+        <button id="left"onclick="AlertaA()">
+            A
+        </button>
+        <button id="right"onclick="AlertaD()">
+            D
+        </button>
+    </div>
+    <div class="Action button">
+        <button onclick="Fuego()"> fire extinguisher</button>
+    </div>
+    <script>
+  // Conectamos con el servidor Node.js (Railway o Local)
+  const socket = io(); 
+
+  // Función genérica para no repetir código
+  function enviarMovimiento(letra) {
+      console.log("Enviando comando:", letra);
+      socket.emit('comando-movimiento', letra);
+  }
+
+  function AlertaW() { enviarMovimiento('W'); }
+  function AlertaS() { enviarMovimiento('S'); }
+  function AlertaA() { enviarMovimiento('A'); }
+  function AlertaD() { enviarMovimiento('D'); }
+  
+  function Fuego() {
+     // alert("Test work");
+      socket.emit('comando-led', '1'); // Enviamos '1' para prender el flash
+  }
+
+    const imgElement = document.getElementById('Camera');
+
+    // Escuchar el evento que configuramos en Node.js
+    socket.on('streaming-video', (datosFoto) => {
+        // Actualizamos el origen de la imagen con el texto Base64
+        imgElement.src = "data:image/jpeg;base64," + datosFoto;
+    });
+
+</script>
+
+</body>
+</html>

@@ -17,5 +17,9 @@
   "bugs": {
     "url": "https://github.com/CALABERUN/firefighterRobot/issues"
   },
-  "homepage": "https://github.com/CALABERUN/firefighterRobot#readme"
+  "homepage": "https://github.com/CALABERUN/firefighterRobot#readme",
+  "dependencies": {
+    "mqtt": "^5.15.1",
+    "socket.io": "^4.8.3"
+  }
 }

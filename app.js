@@ -36,33 +36,35 @@ const server = http.createServer((req, res) => {
     });
 });
 
-// 3. SOCKET.IO (Configurado para video pesado)
+// 3. SOCKET.IO
 const io = socketIo(server, {
-    maxHttpBufferSize: 1e7 // 10MB para soportar Base64
+    maxHttpBufferSize: 1e7 
 });
 
+// --- EL CAMBIO ESTÁ AQUÍ ---
 io.on('connection', (socket) => {
-    console.log('Cliente web conectado');
+    console.log('¡Cliente web conectado! ID:', socket.id);
 
-    socket.on('comando-movimiento', (letra) => {
-        mqttClient.publish('evelyn/robot/mover', letra);
+    // Los eventos DEBEN estar aquí dentro
+    socket.on('comando-movimiento', (valor) => {
+        console.log("RECIBIDO DESDE WEB:", valor);
+        mqttClient.publish('evelyn/robot/mover', valor.toString());
     });
 
-    socket.on('comando-led', (estado) => {
-        mqttClient.publish('evelyn/robot/boton', estado);
+    socket.on('disconnect', () => {
+        console.log('El cliente se desconectó');
     });
 });
+// ---------------------------
 
-// 4. LÓGICA MQTT (Suscripción y Recepción)
+// 4. LÓGICA MQTT
 mqttClient.on('connect', () => {
     console.log("¡Conectado al Broker EMQX!");
-    // Nos suscribimos a la cámara y al estado
     mqttClient.subscribe(['evelyn/robot/camara', 'evelyn/robot/estado']);
 });
 
 mqttClient.on('message', (topic, message) => {
     if (topic === 'evelyn/robot/camara') {
-        // Enviamos la imagen Base64 directamente a la web
         io.emit('streaming-video', message.toString());
     }
 });

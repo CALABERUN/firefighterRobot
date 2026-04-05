@@ -10,43 +10,39 @@
 <body>
     <h1>Camera view</h1>
     <img src="" id="Camera">
+
     <div class="movement">
-        <button id="fow" onclick="AlertaW()">
-            W
-        </button>
-        <button id="bac"onclick="AlertaS()"> 
-        S
-        </button>
-        <button id="left"onclick="AlertaA()">
-            A
-        </button>
-        <button id="right"onclick="AlertaD()">
-            D
-        </button>
-    </div>
-    <div class="Action button">
-        <button onclick="Fuego()"> fire extinguisher</button>
-    </div>
+    <button onpointerdown="enviarComando(1)" onpointerup="enviarComando(0)" id="fow">W</button>
+    <button onpointerdown="enviarComando(4)" onpointerup="enviarComando(0)" id="left">A</button>
+    <button onpointerdown="enviarComando(8)" onpointerup="enviarComando(0)" id="right">D</button>
+    <button onpointerdown="enviarComando(2)" onpointerup="enviarComando(0)" id="bac">S</button>
+</div>
+
+<div class="Action button">
+    <button onpointerdown="enviarComando(11)" onpointerup="enviarComando(0)">
+        > fire extinguisher
+    </button>
+</div>
     <script>
   // Conectamos con el servidor Node.js (Railway o Local)
   const socket = io(); 
-
-  // Función genérica para no repetir código
-  function enviarMovimiento(letra) {
-      console.log("Enviando comando:", letra);
-      socket.emit('comando-movimiento', letra);
+// Esta única función controla todo
+  function enviarComando(valor) {
+      console.log("Enviando estado:", valor);
+      socket.emit('comando-movimiento', valor.toString());
   }
 
-  function AlertaW() { enviarMovimiento('W'); }
-  function AlertaS() { enviarMovimiento('S'); }
-  function AlertaA() { enviarMovimiento('A'); }
-  function AlertaD() { enviarMovimiento('D'); }
-  
-  function Fuego() {
-     // alert("Test work");
-      socket.emit('comando-led', '1'); // Enviamos '1' para prender el flash
-  }
+  // Si usas el control de Play, esta función sumará los bits
+  function enviarComandoMando(mando) {
+    let valor = 0;
+    if (mando.arriba)    valor += 1;
+    if (mando.abajo)     valor += 2;
+    if (mando.izquierda) valor += 4;
+    if (mando.derecha)   valor += 8;
+    if (mando.botonFuego) valor = 11; 
 
+    socket.emit('comando-movimiento', valor.toString());
+  }
     const imgElement = document.getElementById('Camera');
 
     // Escuchar el evento que configuramos en Node.js

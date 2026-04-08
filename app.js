@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const mqtt = require('mqtt');
 const socketIo = require('socket.io');
+const WebSocket = require('ws');
 
 const port = process.env.PORT || 3000;
 
@@ -40,7 +41,9 @@ const server = http.createServer((req, res) => {
 const io = socketIo(server, {
     maxHttpBufferSize: 1e7 
 });
-
+// hacer mas pequenno el buffer 
+// cubernet balanceo de carga 
+// buscar oro que no sea soket <algo para videos>
 // --- EL CAMBIO ESTÁ AQUÍ ---
 io.on('connection', (socket) => {
     console.log('¡Cliente web conectado! ID:', socket.id);
@@ -56,6 +59,18 @@ io.on('connection', (socket) => {
     });
 });
 // ---------------------------
+const wss = new WebSocket.Server({ server }); 
+
+wss.on('connection', (ws) => {
+    console.log('¡ESP32-CAM conectado por canal binario!');
+
+    ws.on('message', (message) => {
+        // message ya viene como un Buffer (binario)
+        // Lo convertimos a Base64 solo para mostrarlo en el <img> de la web
+        const base64Image = message.toString('base64');
+        io.emit('streaming-video', base64Image);
+    });
+});
 
 // 4. LÓGICA MQTT
 mqttClient.on('connect', () => {

@@ -46,13 +46,13 @@
     const imgElement = document.getElementById('Camera');
 let urlObsoleta;
 
-socket.on('streaming-video', (datosFoto) => {
-    // Usar requestAnimationFrame asegura que la imagen se actualice 
-    // sincronizada con los hercios de la pantalla (60fps)
-    requestAnimationFrame(() => {
-        imgElement.src = "data:image/jpeg;base64," + datosFoto;
-    });
-    });
+socket.on('streaming-video', (data) => {
+    const blob = new Blob([data], { type: 'image/jpeg' });
+    const url = URL.createObjectURL(blob);
+
+    document.getElementById("img").src = url;
+});
+
 
 </script>
 

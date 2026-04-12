@@ -122,7 +122,7 @@ mqttClient.on('message', (topic, message) => {
 
     // 📷 STREAM CAMARA
     if (topic === 'evelyn/robot/camara') {
-        io.emit('streaming-video', message.toString());
+        io.emit('streaming-video', finalImage);
     }
 
     // 📡 ESTADO ROBOT

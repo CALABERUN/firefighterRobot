@@ -51,7 +51,11 @@ const server = http.createServer((req, res) => {
         }
     });
 });
-const wss = new WebSocket.Server({ server });
+const wss = new WebSocket.Server({ 
+    server,
+    path: '/'
+});
+
 let esp32Socket = null;
 
 wss.on('connection', (ws) => {

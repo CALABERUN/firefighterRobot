@@ -49,8 +49,8 @@ let urlObsoleta;
 socket.on('streaming-video', (data) => {
     const blob = new Blob([data], { type: 'image/jpeg' });
     const url = URL.createObjectURL(blob);
-
-    document.getElementById("img").src = url;
+    console.log("FRAME RECIBIDO", data);
+    document.getElementById("Camera").src = url;
 });
 
 

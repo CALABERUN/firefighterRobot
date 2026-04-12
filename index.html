@@ -46,12 +46,35 @@
     const imgElement = document.getElementById('Camera');
 let urlObsoleta;
 
+let chunks = [];
+let recibiendo = false;
+
 socket.on('streaming-video', (data) => {
-    const blob = new Blob([data], { type: 'image/jpeg' });
-    const url = URL.createObjectURL(blob);
-    console.log("FRAME RECIBIDO", data);
-    document.getElementById("Camera").src = url;
+
+    if (typeof data === "string") {
+
+        if (data === "START") {
+            chunks = [];
+            recibiendo = true;
+            return;
+        }
+
+        if (data === "END") {
+            const blob = new Blob(chunks, { type: 'image/jpeg' });
+            const url = URL.createObjectURL(blob);
+
+            document.getElementById("Camera").src = url;
+
+            recibiendo = false;
+            return;
+        }
+    }
+
+    if (recibiendo) {
+        chunks.push(data);
+    }
 });
+
 
 
 </script>

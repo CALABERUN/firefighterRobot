@@ -20,7 +20,6 @@ mqttClient.on('connect', () => {
     console.log("MQTT conectado");
 
     mqttClient.subscribe([
-        'evelyn/robot/camara',
         'evelyn/robot/estado'
     ]);
 });
@@ -104,11 +103,13 @@ mqttClient.on('message', (topic, message) => {
     }
 });
 
-let frameChunks = [];
-let receiving = false;
 
 wss.on('connection', (ws) => {
     console.log('ESP32 conectado por WS');
+
+    let frameChunks = [];
+    let receiving = false;
+    const MAX_FRAME_SIZE = 200000;
 
     ws.on('message', (data, isBinary) => {
 
@@ -124,6 +125,8 @@ wss.on('connection', (ws) => {
             if (msg === "END") {
                 const finalImage = Buffer.concat(frameChunks);
 
+                console.log("Frame size:", finalImage.length);
+
                 io.emit('streaming-video', finalImage);
 
                 receiving = false;
@@ -133,13 +136,26 @@ wss.on('connection', (ws) => {
 
         if (receiving && isBinary) {
             frameChunks.push(data);
+
+            let totalSize = frameChunks.reduce((acc, b) => acc + b.length, 0);
+
+            if (totalSize > MAX_FRAME_SIZE) {
+                console.log("Frame demasiado grande, descartado");
+                frameChunks = [];
+                receiving = false;
+            }
         }
     });
 
     ws.on('close', () => {
         console.log('ESP32 desconectado');
     });
+
+    ws.on('error', (err) => {
+        console.log('WS error:', err.message);
+    });
 });
+
 
 // ==========================
 // 5. START SERVER

@@ -56,35 +56,14 @@ const wss = new WebSocket.Server({
     path: '/'
 });
 
-let esp32Socket = null;
-
-wss.on('connection', (ws) => {
-    console.log('ESP32 conectado por WS');
-
-    esp32Socket = ws;
-
-    ws.on('message', (message, isBinary) => {
-    if (isBinary) {
-        // enviar imagen directamente al frontend
-        io.emit('streaming-video', message);
-    } else {
-        console.log("Texto:", message.toString());
-    }
-});
-
-
-    ws.on('close', () => {
-        console.log('ESP32 desconectado');
-        esp32Socket = null;
-    });
-});
-
 // ==========================
 // 3. SOCKET.IO (WEB)
 // ==========================
 const io = socketIo(server, {
-    maxHttpBufferSize: 1e7
+    maxHttpBufferSize: 1e7,
+    perMessageDeflate: false
 });
+
 
 io.on('connection', (socket) => {
     console.log('Web conectada:', socket.id);
@@ -109,11 +88,6 @@ io.on('connection', (socket) => {
         );
     });
 
-    // 📤 WEB → MQTT (mensaje manual opcional)
-    socket.on('mensaje', (msg) => {
-        mqttClient.publish('evelyn/test', msg);
-    });
-
     socket.on('disconnect', () => {
         console.log('Web desconectada:', socket.id);
     });
@@ -124,15 +98,47 @@ io.on('connection', (socket) => {
 // ==========================
 mqttClient.on('message', (topic, message) => {
 
-    // 📷 STREAM CAMARA
-    if (topic === 'evelyn/robot/camara') {
-        io.emit('streaming-video', finalImage);
-    }
-
     // 📡 ESTADO ROBOT
     if (topic === 'evelyn/robot/estado') {
         io.emit('estado-robot', message.toString());
     }
+});
+
+let frameChunks = [];
+let receiving = false;
+
+wss.on('connection', (ws) => {
+    console.log('ESP32 conectado por WS');
+
+    ws.on('message', (data, isBinary) => {
+
+        if (!isBinary) {
+            const msg = data.toString();
+
+            if (msg === "START") {
+                frameChunks = [];
+                receiving = true;
+                return;
+            }
+
+            if (msg === "END") {
+                const finalImage = Buffer.concat(frameChunks);
+
+                io.emit('streaming-video', finalImage);
+
+                receiving = false;
+                return;
+            }
+        }
+
+        if (receiving && isBinary) {
+            frameChunks.push(data);
+        }
+    });
+
+    ws.on('close', () => {
+        console.log('ESP32 desconectado');
+    });
 });
 
 // ==========================

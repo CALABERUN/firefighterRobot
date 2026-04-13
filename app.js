@@ -134,17 +134,17 @@ wss.on('connection', (ws) => {
             }
         }
 
-        if (receiving && isBinary) {
-            frameChunks.push(data);
+if (receiving && isBinary) {
+    frameChunks.push(data);
 
-            let totalSize = frameChunks.reduce((acc, b) => acc + b.length, 0);
+    let totalSize = frameChunks.reduce((acc, b) => acc + b.length, 0);
 
-            if (totalSize > MAX_FRAME_SIZE) {
-                console.log("Frame demasiado grande, descartado");
-                frameChunks = [];
-                receiving = false;
-            }
-        }
+    if (totalSize > MAX_FRAME_SIZE) {
+        console.log("Frame demasiado grande, descartado");
+        frameChunks = [];
+        receiving = false;
+    }
+}
     });
 
     ws.on('close', () => {

@@ -12,10 +12,10 @@
     <img src="" id="Camera">
 
     <div class="movement">
-    <button onpointerdown="enviarComando(1)" onpointerup="enviarComando(0)" id="fow">W</button>
-    <button onpointerdown="enviarComando(4)" onpointerup="enviarComando(0)" id="left">A</button>
-    <button onpointerdown="enviarComando(8)" onpointerup="enviarComando(0)" id="right">D</button>
-    <button onpointerdown="enviarComando(2)" onpointerup="enviarComando(0)" id="bac">S</button>
+    <button onpointerdown="usandoPantalla=true; enviarComando(1)" onpointerup="usandoPantalla=false; enviarComando(0)" id="fow">W</button>
+    <button onpointerdown="usandoPantalla=true; enviarComando(4)" onpointerup="usandoPantalla=false; enviarComando(0)" id="left">A</button>
+    <button onpointerdown="usandoPantalla=true; enviarComando(8)" onpointerup="usandoPantalla=false; enviarComando(0)" id="right">D</button>
+    <button onpointerdown="usandoPantalla=true; enviarComando(2)" onpointerup="usandoPantalla=false; enviarComando(0)" id="bac">S</button>
 </div>
 
 <div class="Action button">
@@ -23,7 +23,7 @@
         > fire extinguisher
     </button>
 </div>
-    <script src="script.js"></script>
+    <script src="index.js"></script>
 
 </body>
 </html>

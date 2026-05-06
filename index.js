@@ -1,22 +1,61 @@
-// Conectamos con el servidor Node.js (Railway o Local)
-  const socket = io(); 
-// Esta única función controla todo
-  function enviarComando(valor) {
-      console.log("Enviando estado:", valor);
-      socket.emit('comando-movimiento', valor.toString());
-  }
+const socket = io();
+let gamepadIndex = null;
+let usandoPantalla = false;
+let ultimoValor = -1;
 
-  // Si usas el control de Play, esta función sumará los bits
-  function enviarComandoMando(mando) {
-    let valor = 0;
-    if (mando.arriba)    valor += 1;
-    if (mando.abajo)     valor += 2;
-    if (mando.izquierda) valor += 4;
-    if (mando.derecha)   valor += 8;
-    if (mando.botonFuego) valor = 11; 
+function enviarComando(valor) {
+
+    // Evita reenviar el mismo valor
+    if (valor === ultimoValor) return;
+
+    ultimoValor = valor;
+
+    console.log("Enviando:", valor);
 
     socket.emit('comando-movimiento', valor.toString());
-  }
+}
+
+window.addEventListener("gamepadconnected", (e) => {
+
+    console.log("Control conectado:", e.gamepad.id);
+
+    gamepadIndex = e.gamepad.index;
+
+    loop();
+});
+
+function loop() {
+    // Si el usuario usa botones táctiles,
+    // el gamepad no interfiere
+    if (usandoPantalla) {
+
+        requestAnimationFrame(loop);
+        return;
+    }
+
+    const gamepads = navigator.getGamepads();
+    const gp = gamepads[gamepadIndex];
+
+    if (!gp) {
+
+        requestAnimationFrame(loop);
+        return;
+    }
+
+    let valor = 0;
+
+    if (gp.buttons[4].pressed)  valor =11;
+    else if (gp.buttons[12].pressed) valor = 1;
+    else if (gp.buttons[13].pressed) valor = 2;
+    else if (gp.buttons[14].pressed) valor = 4;
+    else if (gp.buttons[15].pressed) valor = 8;
+    
+
+    enviarComando(valor);
+
+    requestAnimationFrame(loop);
+}
+
     
     const imgElement = document.getElementById('Camera');
 

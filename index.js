@@ -75,6 +75,6 @@ socket.on('streaming-video', (data) => {
     imgElement.src = url;
 });
 
-    if (recibiendo) {
-        chunks.push(data);
-    }
+    //if (recibiendo) {
+      //  chunks.push(data);
+    //}

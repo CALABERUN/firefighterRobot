@@ -61,8 +61,8 @@ function loop() {
     let valor = 0;
 
     if (teclas.KeyW) valor =1;
-    if (teclas.KeyS) valor =2;
-    if (teclas.KeyA) valor =4;
+    if (teclas.KeyS) valor =4;
+    if (teclas.KeyA) valor =2;
     if (teclas.KeyD) valor =8;
     if (teclas.KeyF) valor =11;
     

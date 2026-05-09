@@ -3,380 +3,366 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    user-select: none; /* Prevents text selection on buttons during taps */
+    -webkit-tap-highlight-color: transparent; /* Removes tap highlight on mobile */
 }
 
 body {
-    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-    background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+    background: linear-gradient(135deg, #0a0f1e 0%, #0a1928 100%);
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 16px;
 }
 
-/* Main container - responsive grid layout */
-main, .container {
-    width: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
-}
-
-/* Camera view styling */
-#Camera {
-    width: 100%;
+/* Main panel container */
+.panel {
     max-width: 800px;
-    height: auto;
-    aspect-ratio: 16 / 9;
-    background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
-    border-radius: 28px;
-    box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.5), inset 0 1px 2px rgba(255, 255, 255, 0.1);
-    object-fit: cover;
-    border: 2px solid rgba(255, 255, 255, 0.15);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    width: 100%;
+    background: #0a2a44; /* Deep blue background */
+    border-radius: 32px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(33, 150, 243, 0.2);
+    overflow: hidden;
+    backdrop-filter: blur(2px);
+    transition: all 0.3s ease;
 }
 
-#Camera:hover {
-    transform: scale(1.01);
-    box-shadow: 0 30px 55px -15px rgba(0, 0, 0, 0.6);
+/* Header styles */
+.header {
+    background: #0a2a44;
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid #2196f3;
+    flex-wrap: wrap;
+    gap: 16px;
 }
 
-h1 {
-    text-align: center;
-    color: #f0f0f0;
+.header h1 {
+    color: white;
+    font-size: 1.6rem;
     font-weight: 600;
-    font-size: clamp(1.5rem, 5vw, 2.2rem);
-    letter-spacing: -0.3px;
-    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    margin-bottom: 20px;
-    background: linear-gradient(135deg, #e0e0e0, #b0b0b0);
+    letter-spacing: 1px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, #fff, #90caf9);
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
 }
 
-/* Layout wrapper - centers camera, cross on right, action on left */
-.layout {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    gap: 30px;
-    margin-top: 20px;
+
+/* Logo with red background as requested */
+#logou {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #0a2a44; /* Red background */
+    padding: 8px;
+    object-fit: contain;
+    box-shadow: 0 4px 12px rgba(211, 47, 47, 0.4);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
-/* Camera container - center element */
-.camera-container {
-    flex: 2;
-    min-width: 250px;
-    display: flex;
-    justify-content: center;
-    order: 2;
+#logou:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(211, 47, 47, 0.6);
 }
 
-/* Action button container - left side */
-.action-container {
-    flex: 1;
-    min-width: 140px;
-    display: flex;
-    justify-content: flex-start;
-    order: 1;
+/* Camera image styling */
+#Camera {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    background: #000000; /* Black background while loading */
+    display: block;
+    border-bottom: 3px solid #2196f3;
+    transition: opacity 0.3s ease;
 }
 
-/* Movement controls container - right side */
-.movement-container {
-    flex: 1;
-    min-width: 180px;
+/* Controls container */
+.controls {
+    padding: 24px;
+    background: #0d2f4e;
     display: flex;
-    justify-content: flex-end;
-    order: 3;
+    flex-direction: column;
+    gap: 28px;
 }
 
-/* Movement cross layout */
+/* Movement buttons grid */
 .movement {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    gap: 12px;
-    background: rgba(20, 25, 45, 0.6);
-    backdrop-filter: blur(8px);
-    padding: 20px;
-    border-radius: 60px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-/* Position buttons in cross pattern */
-.movement button:nth-child(1) { /* forward */
-    grid-column: 2 / 3;
-    grid-row: 1 / 2;
-}
-.movement button:nth-child(2) { /* backward */
-    grid-column: 2 / 3;
-    grid-row: 3 / 4;
-}
-.movement button:nth-child(3) { /* left */
-    grid-column: 1 / 2;
-    grid-row: 2 / 3;
-}
-.movement button:nth-child(4) { /* right */
-    grid-column: 3 / 4;
-    grid-row: 2 / 3;
-}
-
-/* Button styling */
-button {
-    background: linear-gradient(145deg, #2c2f3f, #1e212e);
-    border: none;
-    padding: 14px 18px;
-    border-radius: 50px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    letter-spacing: 0.5px;
-    color: #f0f0f0;
-    cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-    box-shadow: 0 6px 0 #0f0f17;
-    text-transform: uppercase;
-    backdrop-filter: blur(4px);
+    gap: 14px;
+    max-width: 280px;
+    margin: 0 auto;
     width: 100%;
-    text-align: center;
 }
 
 .movement button {
-    width: 70px;
-    height: 70px;
-    padding: 0;
-    border-radius: 50%;
-    font-size: 0.75rem;
-    font-weight: 700;
-    background: linear-gradient(145deg, #3a3f55, #222638);
-    box-shadow: 0 8px 0 #12121a;
+    background: #1a4a7a;
+    border: none;
+    color: white;
+    font-size: 1.8rem;
+    font-weight: bold;
+    padding: 18px 0;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    box-shadow: 0 6px 0 #0a2a44;
+    font-family: monospace;
+    letter-spacing: 2px;
+    backdrop-filter: blur(4px);
+    -webkit-tap-highlight-color: transparent;
 }
 
 .movement button:active {
     transform: translateY(3px);
-    box-shadow: 0 3px 0 #12121a;
+    box-shadow: 0 3px 0 #0a2a44;
 }
 
-/* Action button specific */
-.Action button {
-    background: linear-gradient(145deg, #c92a2a, #a61e1e);
-    box-shadow: 0 8px 0 #5c0e0e;
-    padding: 16px 28px;
-    font-size: 1rem;
-    font-weight: 700;
-    border-radius: 60px;
+/* Special positioning for WASD layout */
+#fow {
+    grid-column: 2 / 3;
+    background: #2196f3;
+    box-shadow: 0 6px 0 #0d47a1;
+}
+
+#left {
+    grid-column: 1 / 2;
+}
+
+#right {
+    grid-column: 3 / 4;
+}
+
+#bac {
+    grid-column: 2 / 3;
+}
+
+/* Action button area */
+.Action {
     display: flex;
-    align-items: center;
-    gap: 8px;
     justify-content: center;
-    min-width: 160px;
 }
 
-.Action button::before {
-    content: "🧯";
+.Action button {
+    background: #d32f2f; /* Red color for action button */
+    border: none;
+    color: white;
     font-size: 1.2rem;
-    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));
+    font-weight: 600;
+    padding: 14px 32px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 6px 0 #8b0000;
+    letter-spacing: 1px;
+    width: 100%;
+    max-width: 280px;
+    text-transform: uppercase;
+    backdrop-filter: blur(4px);
 }
 
 .Action button:active {
-    transform: translateY(4px);
-    box-shadow: 0 4px 0 #5c0e0e;
+    transform: translateY(3px);
+    box-shadow: 0 3px 0 #8b0000;
 }
 
-button:hover {
-    background: linear-gradient(145deg, #404664, #2a2e42);
-    filter: brightness(1.05);
+/* Hover effects for desktop */
+@media (min-width: 768px) {
+    .movement button:hover {
+        background: #2a6a9a;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 0 #0a2a44;
+    }
+    
+    .movement button:active {
+        transform: translateY(3px);
+        box-shadow: 0 3px 0 #0a2a44;
+    }
+    
+    .Action button:hover {
+        background: #e53935;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 0 #8b0000;
+    }
+    
+    .Action button:active {
+        transform: translateY(3px);
+        box-shadow: 0 3px 0 #8b0000;
+    }
+    
+    .panel {
+        margin: 20px;
+    }
 }
 
-.Action button:hover {
-    background: linear-gradient(145deg, #e03a3a, #b82222);
-}
-
-/* Focus styles for accessibility */
-button:focus-visible {
-    outline: 3px solid #ffaa44;
-    outline-offset: 3px;
-}
-
-/* Mobile-first responsive design */
-@media (max-width: 850px) {
+/* Phone optimizations */
+@media (max-width: 480px) {
     body {
-        padding: 16px;
-        align-items: flex-start;
+        padding: 8px;
     }
     
-    .layout {
-        flex-direction: column;
-        gap: 25px;
-    }
-    
-    .camera-container {
-        order: 1;
-        width: 100%;
-    }
-    
-    #Camera {
-        max-width: 100%;
-        width: 100%;
+    .panel {
         border-radius: 24px;
     }
     
-    .action-container {
-        order: 2;
-        justify-content: center;
-        width: 100%;
+    .header {
+        padding: 14px 18px;
     }
     
-    .movement-container {
-        order: 3;
-        justify-content: center;
-        width: 100%;
+    .header h1 {
+        font-size: 1.2rem;
     }
     
-    .movement {
-        gap: 15px;
+    #logou {
+        width: 42px;
+        height: 42px;
+        padding: 6px;
+    }
+    
+    .controls {
         padding: 18px;
-        border-radius: 50px;
-        background: rgba(20, 25, 45, 0.7);
-    }
-    
-    .movement button {
-        width: 65px;
-        height: 65px;
-        font-size: 0.7rem;
-    }
-    
-    .Action button {
-        padding: 14px 24px;
-        font-size: 0.95rem;
-        min-width: 200px;
-    }
-}
-
-/* Small phones (portrait) */
-@media (max-width: 550px) {
-    .movement button {
-        width: 55px;
-        height: 55px;
-        font-size: 0.65rem;
+        gap: 20px;
     }
     
     .movement {
-        gap: 12px;
-        padding: 15px;
+        gap: 10px;
+        max-width: 240px;
     }
     
-    h1 {
-        margin-bottom: 12px;
+    .movement button {
+        font-size: 1.4rem;
+        padding: 14px 0;
+        border-radius: 16px;
     }
     
     .Action button {
+        font-size: 1rem;
         padding: 12px 20px;
-        font-size: 0.85rem;
-        min-width: 170px;
+        max-width: 240px;
     }
 }
 
-/* Large desktop enhancements */
-@media (min-width: 1200px) {
-    .movement button {
-        width: 85px;
-        height: 85px;
-        font-size: 0.9rem;
+/* Extra small devices (very compact) */
+@media (max-width: 360px) {
+    .movement {
+        gap: 8px;
+        max-width: 200px;
     }
     
-    .movement {
-        gap: 18px;
-        padding: 28px;
+    .movement button {
+        font-size: 1.2rem;
+        padding: 10px 0;
+    }
+    
+    .header h1 {
+        font-size: 1rem;
     }
     
     .Action button {
-        padding: 18px 34px;
-        font-size: 1.1rem;
-    }
-    
-    #Camera {
-        max-width: 900px;
+        font-size: 0.9rem;
+        padding: 10px 16px;
     }
 }
 
-/* Fix for HTML structure - wrap content if needed */
-body > h1,
-body > img,
-body > div {
-    max-width: 1400px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-/* Ensure camera fills top on mobile when using direct children (no wrapper) */
-@media (max-width: 850px) {
+/* Landscape mode on phones */
+@media (max-width: 768px) and (orientation: landscape) {
     body {
-        display: flex;
-        flex-direction: column;
+        padding: 8px;
     }
     
-    /* Reorder for raw HTML without container */
-    body > h1 { order: 0; }
-    body > #Camera { order: 1; width: 100%; margin-bottom: 20px; }
-    body > .movement { order: 3; }
-    body > .Action { order: 2; margin-bottom: 20px; }
-    
-    /* When no layout wrapper exists, ensure movement is a cross */
-    body > .movement {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        grid-template-rows: repeat(3, 1fr);
-        gap: 12px;
-        background: rgba(20, 25, 45, 0.6);
-        backdrop-filter: blur(8px);
-        padding: 20px;
-        border-radius: 60px;
-        width: fit-content;
-        margin: 0 auto;
+    .panel {
+        max-width: 90%;
     }
     
-    body > .movement button:nth-child(1) { grid-column: 2 / 3; grid-row: 1 / 2; }
-    body > .movement button:nth-child(2) { grid-column: 2 / 3; grid-row: 3 / 4; }
-    body > .movement button:nth-child(3) { grid-column: 1 / 2; grid-row: 2 / 3; }
-    body > .movement button:nth-child(4) { grid-column: 3 / 4; grid-row: 2 / 3; }
+    .controls {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+    
+    .movement {
+        margin: 0;
+        max-width: 220px;
+    }
     
     .Action {
-        text-align: center;
+        flex: 1;
+        justify-content: flex-end;
+    }
+    
+    .Action button {
+        max-width: 200px;
+    }
+    
+    .header h1 {
+        font-size: 1.2rem;
     }
 }
 
-/* Ensure cross shape works in all scenarios */
-.movement {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    gap: 12px;
-    place-items: center;
+/* Tablet and desktop intermediate */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .panel {
+        max-width: 700px;
+    }
+    
+    .movement button {
+        font-size: 1.6rem;
+        padding: 16px 0;
+    }
 }
 
-.movement button {
+/* Focus and accessibility */
+button:focus-visible {
+    outline: 3px solid #ffeb3b;
+    outline-offset: 2px;
+}
+
+/* Loading state for camera */
+#Camera[src=""] {
+    background: #111;
+    position: relative;
+}
+
+#Camera[src=""]::after {
+    content: "📷 Waiting for stream...";
     display: flex;
     align-items: center;
     justify-content: center;
-    text-align: center;
+    color: white;
+    font-size: 1rem;
 }
 
-/* Fluid camera on mobile - always on top filling width */
-@media (max-width: 850px) {
-    #Camera {
-        width: 100%;
-        max-width: 100%;
-        display: block;
-        margin-top: 10px;
-        margin-bottom: 10px;
+/* Additional nice touches */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(33, 150, 243, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(33, 150, 243, 0);
     }
 }
 
-/* Optional smooth container if you wrap elements later */
-.wrapper {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+#fow:active {
+    animation: pulse 0.3s ease-out;
+}
+
+.Action button:active {
+    animation: pulse 0.3s ease-out;
+}
+
+/* Smooth transitions for all interactive elements */
+button, #logou, #Camera {
+    transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
 }

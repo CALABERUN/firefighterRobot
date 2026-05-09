@@ -3,27 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="stylesheet" href="index.css">
     <link rel="icon" href="img/26475.jpg" type="image/png">
+
     <script src="/socket.io/socket.io.js"></script>
-    <title>Document</title>
+
+    <title>Camera Control</title>
 </head>
+
 <body>
-    <h1>Camera view</h1>
-    <img src="" id="Camera">
 
-    <div class="movement">
-    <button onpointerdown="usandoPantalla=true; enviarComando(1)" onpointerup="usandoPantalla=false; enviarComando(0)" id="fow">W</button>
-    <button onpointerdown="usandoPantalla=true; enviarComando(4)" onpointerup="usandoPantalla=false; enviarComando(0)" id="left">A</button>
-    <button onpointerdown="usandoPantalla=true; enviarComando(8)" onpointerup="usandoPantalla=false; enviarComando(0)" id="right">D</button>
-    <button onpointerdown="usandoPantalla=true; enviarComando(2)" onpointerup="usandoPantalla=false; enviarComando(0)" id="bac">S</button>
-</div>
+    <div class="panel">
 
-<div class="Action button">
-    <button onpointerdown="enviarComando(11)" onpointerup="enviarComando(0)">
-        > fire extinguisher
-    </button>
-</div>
+        <div class="header">
+
+            <h1>Camera view</h1>
+
+            <img src="img/Unilogo.png" alt="Logo de la universidad" id="logou">
+
+        </div>
+
+        <img src="" id="Camera">
+
+        <div class="controls">
+
+            <div class="movement">
+                <button onpointerdown="usandoPantalla=true; enviarComando(1)" onpointerup="usandoPantalla=false; enviarComando(0)" id="fow">W</button>
+                <button onpointerdown="usandoPantalla=true; enviarComando(4)" onpointerup="usandoPantalla=false; enviarComando(0)" id="left">A</button>
+                <button onpointerdown="usandoPantalla=true; enviarComando(8)" onpointerup="usandoPantalla=false; enviarComando(0)" id="right">D</button>
+                <button onpointerdown="usandoPantalla=true; enviarComando(2)" onpointerup="usandoPantalla=false; enviarComando(0)" id="bac">S</button>
+            </div>
+
+            <div class="Action">
+                <button onpointerdown="enviarComando(11)" onpointerup="enviarComando(0)">Fire extinguisher</button>
+            </div>
+
+        </div>
+
+    </div>
+
     <script src="index.js"></script>
 
 </body>

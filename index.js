@@ -5,6 +5,12 @@ let ultimoValor = -1;
 
 function enviarComando(valor) {
 
+    const validos = [0, 1, 2, 4, 8, 11];
+
+    if (!validos.includes(valor)) {
+        return;
+    }
+
     // Evita reenviar el mismo valor
     if (valor === ultimoValor) return;
 
@@ -23,16 +29,35 @@ window.addEventListener("gamepadconnected", (e) => {
 
     loop();
 });
+window.addEventListener('keydown', (event) => {
 
+    if (event.code in teclas) {
+        teclas[event.code] = true;
+    }
+});
+
+window.addEventListener('keyup', (event) => {
+
+    if (event.code in teclas) {
+        teclas[event.code] = false;
+    }
+});
 function loop() {
     // Si el usuario usa botones táctiles,
     // el gamepad no interfiere
     if (usandoPantalla) {
 
         requestAnimationFrame(loop);
-        return;
+        return;s
     }
 
+    let valor = 0;
+
+    if (teclas.KeyW) valor =1;
+    if (teclas.KeyS) valor =2;
+    if (teclas.KeyA) valor =4;
+    if (teclas.KeyD) valor =8;
+    if (teclas.KeyF) valor =11;
     const gamepads = navigator.getGamepads();
     const gp = gamepads[gamepadIndex];
 
@@ -42,7 +67,6 @@ function loop() {
         return;
     }
 
-    let valor = 0;
 
     if (gp.buttons[4].pressed)  valor =11;
     else if (gp.buttons[12].pressed) valor = 1;
@@ -75,6 +99,4 @@ socket.on('streaming-video', (data) => {
     imgElement.src = url;
 });
 
-    //if (recibiendo) {
-      //  chunks.push(data);
-    //}
+

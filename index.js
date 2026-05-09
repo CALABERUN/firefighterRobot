@@ -39,7 +39,7 @@ window.addEventListener('keydown', (event) => {
     if (event.code in teclas) {
         teclas[event.code] = true;
     }
-    loop();
+
 });
 
 window.addEventListener('keyup', (event) => {
@@ -47,7 +47,7 @@ window.addEventListener('keyup', (event) => {
     if (event.code in teclas) {
         teclas[event.code] = false;
     }
-    loop();
+
 });
 function loop() {
     // Si el usuario usa botones táctiles,
@@ -65,22 +65,19 @@ function loop() {
     if (teclas.KeyA) valor =4;
     if (teclas.KeyD) valor =8;
     if (teclas.KeyF) valor =11;
+    
     const gamepads = navigator.getGamepads();
     const gp = gamepads[gamepadIndex];
 
-    if (!gp) {
-
-        requestAnimationFrame(loop);
-        return;
-    }
-
-
+    if (gp) {
     if (gp.buttons[4].pressed)  valor =11;
     else if (gp.buttons[12].pressed) valor = 1;
     else if (gp.buttons[13].pressed) valor = 2;
     else if (gp.buttons[14].pressed) valor = 4;
     else if (gp.buttons[15].pressed) valor = 8;
-    
+
+    }
+
 
     enviarComando(valor);
 
@@ -105,5 +102,6 @@ socket.on('streaming-video', (data) => {
 
     imgElement.src = url;
 });
+loop();
 
 

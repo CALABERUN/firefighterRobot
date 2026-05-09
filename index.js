@@ -39,6 +39,7 @@ window.addEventListener('keydown', (event) => {
     if (event.code in teclas) {
         teclas[event.code] = true;
     }
+    loop();
 });
 
 window.addEventListener('keyup', (event) => {
@@ -46,6 +47,7 @@ window.addEventListener('keyup', (event) => {
     if (event.code in teclas) {
         teclas[event.code] = false;
     }
+    loop();
 });
 function loop() {
     // Si el usuario usa botones táctiles,

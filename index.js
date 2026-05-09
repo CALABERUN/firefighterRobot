@@ -2,7 +2,7 @@ const socket = io();
 let gamepadIndex = null;
 let usandoPantalla = false;
 let ultimoValor = -1;
-
+let teclas=null;
 function enviarComando(valor) {
 
     const validos = [0, 1, 2, 4, 8, 11];

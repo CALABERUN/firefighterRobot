@@ -18,7 +18,7 @@
 
         <div class="header">
 
-            <h1>D-I-0336-7</h1>
+            <h1>Camera view</h1>
 
             <img src="img/Unilogo.png" alt="Logo de la universidad" id="logou">
 
@@ -27,6 +27,14 @@
         <img src="" id="Camera">
 
         <div class="controls">
+
+            <div class="movement">
+                <button onpointerdown="usandoPantalla=true; enviarComando(1)" onpointerup="usandoPantalla=false; enviarComando(0)" id="fow">W</button>
+                <button onpointerdown="usandoPantalla=true; enviarComando(4)" onpointerup="usandoPantalla=false; enviarComando(0)" id="left">D</button>
+                <button onpointerdown="usandoPantalla=true; enviarComando(8)" onpointerup="usandoPantalla=false; enviarComando(0)" id="right">A</button>
+                <button onpointerdown="usandoPantalla=true; enviarComando(2)" onpointerup="usandoPantalla=false; enviarComando(0)" id="bac">S</button>
+            </div>
+
             <div class="Action">
                 <button onpointerdown="enviarComando(11)" onpointerup="enviarComando(0)">Fire extinguisher</button>
             </div>

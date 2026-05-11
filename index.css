@@ -125,26 +125,6 @@ body {
     box-shadow: 0 3px 0 #0a2a44;
 }
 
-/* Special positioning for WASD layout */
-#fow {
-    grid-column: 2 ;
-    grid-row: 1;
-}
-
-#left {
-    grid-column: 3 ;
-    grid-row: 2;
-}
-
-#right {
-    grid-column: 1;
-    grid-row: 2;
-}
-
-#bac {
-    grid-column: 2;
-    grid-row: 3;
-}
 
 /* Action button area */
 .Action {

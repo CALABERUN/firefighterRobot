@@ -3,11 +3,28 @@ let gamepadIndex = null;
 let usandoPantalla = false;
 let ultimoValor = -1;
 const teclas = {
-    KeyW: false,
-    KeyA: false,
-    KeyS: false,
-    KeyD: false
+    w: false,
+    a: false,
+    s: false,
+    d: false,
+    f: false
 };
+
+window.addEventListener('keydown', (event) => {
+    const tecla = event.key.toLowerCase();
+
+    if (tecla in teclas) {
+        teclas[tecla] = true;
+    }
+});
+
+window.addEventListener('keyup', (event) => {
+    const tecla = event.key.toLowerCase();
+
+    if (tecla in teclas) {
+        teclas[tecla] = false;
+    }
+});
 function enviarComando(valor) {
 
     const validos = [0, 1, 2, 4, 8, 11];
@@ -34,37 +51,23 @@ window.addEventListener("gamepadconnected", (e) => {
 
     loop();
 });
-window.addEventListener('keydown', (event) => {
 
-    if (event.code in teclas) {
-        teclas[event.code] = true;
-    }
-
-});
-
-window.addEventListener('keyup', (event) => {
-
-    if (event.code in teclas) {
-        teclas[event.code] = false;
-    }
-
-});
 function loop() {
     // Si el usuario usa botones táctiles,
     // el gamepad no interfiere
     if (usandoPantalla) {
 
         requestAnimationFrame(loop);
-        return;s
+        return;
     }
 
     let valor = 0;
 
-    if (teclas.KeyW) valor =1;
-    if (teclas.KeyS) valor =4;
-    if (teclas.KeyA) valor =2;
-    if (teclas.KeyD) valor =8;
-    if (teclas.KeyF) valor =11;
+    if (teclas.w) valor = 1;
+    if (teclas.s) valor = 4;
+    if (teclas.a) valor = 2;
+    if (teclas.d) valor = 8;
+    if (teclas.f) valor = 11;
     
     const gamepads = navigator.getGamepads();
     const gp = gamepads[gamepadIndex];

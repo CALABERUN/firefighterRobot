@@ -64,9 +64,9 @@ function loop() {
     let valor = 0;
 
     if (teclas.w) valor = 1;
-    if (teclas.s) valor = 4;
-    if (teclas.a) valor = 2;
-    if (teclas.d) valor = 8;
+    if (teclas.s) valor = 2;
+    if (teclas.a) valor = 8;
+    if (teclas.d) valor = 4;
     if (teclas.f) valor = 11;
     
     const gamepads = navigator.getGamepads();
